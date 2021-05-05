@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+  <title>axios - file upload example</title>
+</head>
+<body class="container">
+<h1>Task 2</h1>
+<form role="form" class="form" onsubmit="return false;">
+  <button id="upload" type="button" class="btn btn-primary">Add data</button>
+</form>
+<div id="output" class="container"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  (function () {
+    var output = document.getElementById('output');
+    document.getElementById('upload').onclick = function () {
+
+      var config = {
+        onUploadProgress: function(progressEvent) {
+          var percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
+          console.log('loading percentage '+percentCompleted);
+        }
+      };
+
+      axios.post('https://jsonplaceholder.typicode.com/posts',   //   метод post  -  url
+              {
+                userId: '1',                               //  данные
+                title: '5555555555555555555555555',
+                body: '777777777777777777777777'
+              },
+              config)                                    //  config -- onUploadProgress
+              .then(function (res) {
+                console.log(res);           // вывод объекта в консоль
+                console.log(res.data);      // вывод данных в консоль
+                output.className = 'container';
+                output.innerHTML = JSON.stringify(res.data);  //  вывод данных на страницу в div
+              })
+              .catch(function (err) {            // если ошибка
+                output.className = 'container text-danger';
+                output.innerHTML = err.message;
+              });
+    };
+  })();
+</script>
+</body>
+</html>
